@@ -36,10 +36,10 @@ insert into applicants values(4 , 'Sakshi' , 'Jadhav' , 'Jsakshi@.com' , '546739
 insert into applicants values(5 , 'Amit' , 'Mane' , 'amit@.com' , '6354908654' , 'Software Developer CSE');
 
 insert into applications values(1 ,1 , 1 , '2025-04-02 14:30:00' , 'CV1') ;
-insert into applications values(2 , 2 , 2 , '' , 'CV2') ;
-insert into applications values(3 , 3 , 3 , '' , 'CV3') ;
-insert into applications values(4 , 4 , 4 , '' , 'CV4') ;
-insert into applications values(5 , 5 , 5 , '' , 'CV5') ;
+insert into applications values(2 , 2 , 2 , '2025-05-05 13:00:00' , 'CV2') ;
+insert into applications values(3 , 3 , 3 , '2024-11-15 11:15:00' , 'CV3') ;
+insert into applications values(4 , 4 , 4 , '2023-08-15 08:00:00' , 'CV4') ;
+insert into applications values(5 , 5 , 5 , '2020-06-15 09:25:00' , 'CV5') ;
 
 /*5. Write an SQL query to count the number of applications received for each job listing in the 
 "Jobs" table. Display the job title and the corresponding application count. Ensure that it lists all 
