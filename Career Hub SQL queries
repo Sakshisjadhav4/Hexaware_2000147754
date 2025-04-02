@@ -1,0 +1,178 @@
+Sakshi Shivaji jadhav Emp id 2000147754 Mavericks batch 4 Mumbai
+
+1. Provide a SQL script that initializes the database for the Job Board scenario “CareerHub”. 
+create database careerHub1;
+
+use careerHub1;
+
+2. Create tables for Companies, Jobs, Applicants and Applications. 
+
+create table companies(CompanyId int primary key , CompanyName varchar(30) , Location varchar(30));
+
+create table Jobs3(JobID int primary key , CompanyId int , JobTitle varchar(20) , JobDescription varchar(40) , JobLocation varchar(20) , Salary float , JobType varchar(30) , PostedDate datetime , foreign key(CompanyId) references companies(CompanyId) );
+
+create table applicants(ApplicantID  int primary key ,FirstName varchar(20) , LastName varchar(20) ,Email varchar(30) , Phone varchar(20) , Resume varchar(40));
+
+create table applications(ApplicationID  int primary key ,
+JobID int ,
+ApplicantID int ,
+ApplicationDate datetime,
+CoverLetter varchar(40) , 
+foreign key(JobID) references jobs(JobID) , 
+foreign key(ApplicantID) references applicants(ApplicantID)
+);
+
+insert into companies values(1 , 'ABC' , 'Pune') , (2 , 'DEF' , 'Mumbai') , (3 , 'GHI' , 'Chennai') , (4 , 'JKL' , 'Kolhapur') ,  (5 , 'MNO' , 'Nashik') ,  (6 , 'PQR' , 'Pune') ,  (7 , 'STU' , 'Kolhapur') , (8 , 'STU' , 'Mumbai') ;
+
+insert into Jobs3 values(1 , 1 , 'Software Engg' , 'abc' , 'Kolhapur' , 40000 , 'klm', '2025-04-02 14:30:00') ;
+insert into Jobs3 values(2 , 2 , 'Web Dev' , 'def' , 'Pune' , 30000 , 'nop' , '2024-09-11 15:45:00') ;
+insert into Jobs3 values (3 , 3 , 'Sales man' , 'ghi' , 'Mumbai' , 25000 , 'dfe' , '2023-05-02 13:30:00') , (4 , 3 , ' Manager' , 'jkl' , 'Pune' , 50000 , 'imh' , '2025-11-20 08:00:00' ) , (5 , 2 , 'Software Engg' , 'abc' , 'Kolhapur' , 45000 , 'sgb' , '2024-04-26 10:00:00' ) , (6 , 4 , 'HR' , 'xyz' , 'Sangli' , 35000 , 'shg' , '2025-10-03 09:15:00')  ;
+
+
+insert into applicants values(1 , 'Rita' , 'Patil' , 'rita@.com' , '1234098645' , 'Software Developer CSE');
+insert into applicants values(2 , 'Rahul' , 'Kumar' , 'rahulK@.com' , '0987612346' , 'Web Developer CSE');
+insert into applicants values(3 , 'Geeta' , 'More' , 'GeetaM@.com' , '7645098724' , 'HP Comp');
+insert into applicants values(4 , 'Sakshi' , 'Jadhav' , 'Jsakshi@.com' , '5467398726' , 'Manager Comp');
+insert into applicants values(5 , 'Amit' , 'Mane' , 'amit@.com' , '6354908654' , 'Software Developer CSE');
+
+insert into applications values(1 ,1 , 1 , '2025-04-02 14:30:00' , 'CV1') ;
+insert into applications values(2 , 2 , 2 , '' , 'CV2') ;
+insert into applications values(3 , 3 , 3 , '' , 'CV3') ;
+insert into applications values(4 , 4 , 4 , '' , 'CV4') ;
+insert into applications values(5 , 5 , 5 , '' , 'CV5') ;
+
+/*5. Write an SQL query to count the number of applications received for each job listing in the 
+"Jobs" table. Display the job title and the corresponding application count. Ensure that it lists all 
+jobs, even if they have no applications.*/
+
+select count(A.ApplicationID) , J.JobTitle  from applications A right join Jobs3 J on A.JobID = J.JobID group by (J.JobTitle );
+
+/*Develop an SQL query that retrieves job listings from the "Jobs" table within a specified salary 
+range. Allow parameters for the minimum and maximum salary values. Display the job title, 
+company name, location, and salary for each matching job.*/
+
+select J.JobTitle , C.CompanyName , C.Location , J.Salary from companies C join Jobs3 J on C.CompanyId = J.CompanyId where J.Salary between (select min(Salary) from Jobs3 )and (select max(Salary) from Jobs3 );
+
+
+/*Write an SQL query that retrieves the job application history for a specific applicant. Allow a 
+parameter for the ApplicantID, and return a result set with the job titles, company names, and 
+application dates for all the jobs the applicant has applied to.*/
+
+select J.JobTitle , C.CompanyName , A.ApplicationDate from applications A join Jobs3 J on A.JobID = J.JobID join companies C on J.CompanyId = C.CompanyId where A.ApplicantID = A.ApplicantID;  
+
+/*8. Create an SQL query that calculates and displays the average salary offered by all companies for 
+job listings in the "Jobs" table. Ensure that the query filters out jobs with a salary of zero.*/
+
+select avg(Salary) from Jobs3 where Salary > 0 ;
+
+/*9. Write an SQL query to identify the company that has posted the most job listings. Display the 
+company name along with the count of job listings they have posted. Handle ties if multiple 
+companies have the same maximum count*/
+
+select c.CompanyName , count(J.JobID) as cnt from companies C join Jobs3 J on C.CompanyId = J.CompanyId group by c.CompanyId , C.CompanyName order by cnt desc limit 1;
+
+
+/*10. Find the applicants who have applied for positions in companies located in 'CityX' and have at 
+least 3 years of experience.*/
+
+select distinct ap.FirstName , ap.LastName from applications A join applicants ap on A.ApplicantID = ap.ApplicantID join Jobs3 J on A.JobID = J.JobID join companies C on J.CompanyId = C.CompanyId where C.Location = 'Pune' and ap.Resume Like '%3 Years%' ;
+
+
+/*11. Retrieve a list of distinct job titles with salaries between $60000 and 80000.*/
+
+select distinct JobTitle from Jobs3 where Salary between 60000 and 80000;
+
+/*11. Retrieve a list of distinct job titles with salaries between $30000 and 40000.*/
+
+select distinct JobTitle from Jobs3 where Salary between 30000 and 40000;
+
+*12. Find the jobs that have not received any applications*/
+
+select J.JobTitle from Jobs3 J left join applications a on J.JobID = a.JobID where a.ApplicationID is NUll;
+
+/*13. Retrieve a list of job applicants along with the companies they have applied to and the positions 
+they have applied for.*/
+
+select a.FirstName , a.LastName , C.CompanyName , J.JobTitle from applications ap join Jobs3 J on ap.JobId= J.JobID join companies C on J.CompanyId = C.CompanyId join applicants a on ap.ApplicantID = a.ApplicantID;
+
+/*14. Retrieve a list of companies along with the count of jobs they have posted, even if they have not 
+received any applications.*/
+
+select C.CompanyName , count(J.JobID) from companies C left join Jobs3 J on C.CompanyId = J.CompanyId group by C.CompanyName;
+
+
+/*15. List all applicants along with the companies and positions they have applied for, including those 
+who have not applied.*/
+
+select a.FirstName , a.LastName , C.CompanyName , J.JobTitle from applicants a left join applications ap on a.ApplicantID = ap.ApplicantID left join Jobs3 J on ap.JobID = J.JobID left join companies C on J.CompanyId = C.CompanyId;
+
+/*16. Find companies that have posted jobs with a salary higher than the average salary of all job*/
+
+select C.CompanyName from companies C join Jobs3 J on C.CompanyId = J.CompanyId where J.Salary > (Select avg(Salary) from Jobs3 where Salary > 0) ;
+
+
+
+/*17. Display a list of applicants with their names and a concatenated string of their city and state.
+*/
+
+select A.FirstName , A.LastName , (C.Location) from applicants A, companies C;
+
+
+
+/*18. Retrieve a list of jobs with titles containing either 'Developer' or 'Engineer'.*/
+
+select * from Jobs3 where JobTitle like '%developer%' or JobTitle like '%engg%';
+
+/*19. Retrieve a list of applicants and the jobs they have applied for, including those who have not 
+applied and jobs without applicants.*/
+
+select a.FirstName , a.LastName , J.JobTitle from applicants a left join applications ap on a.ApplicantID = ap.ApplicantID left join Jobs3 J on ap.JobID = J.JobID;
+
+
+
+/*20. List all combinations of applicants and companies where the company is in a specific city and the 
+applicant has more than 2 years of experience. For example: city=Chennai*/
+
+select a.FirstName , a.LastName , C.CompanyName from applicants a cross join companies C where C.Location = 'Chennai' and a.Resume like '%2years%';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
