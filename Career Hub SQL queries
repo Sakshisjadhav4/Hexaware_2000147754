@@ -18,7 +18,7 @@ JobID int ,
 ApplicantID int ,
 ApplicationDate datetime,
 CoverLetter varchar(40) , 
-foreign key(JobID) references jobs(JobID) , 
+foreign key(JobID) references Jobs3(JobID) , 
 foreign key(ApplicantID) references applicants(ApplicantID)
 );
 
